@@ -16,9 +16,11 @@ a_trans_list = []
 总体流程
 每100句话用'\n'作为分隔符组成一个文档放入谷歌进行翻译，翻译回来后解析回原来的100句话。
 单句单句输入太费时间。如此设计10w短文本的翻译时间大约是20min。
+注意，100句话总字数不能超过5000字，这是谷歌翻译的限制。因此可根据文本长度自由调节这个combined_length值.
 """
-for i in tqdm(range(len(a_list)//100+1)):
-    content = '\n'.join(a_list[i*100:(i+1)*100])
+combined_length = 100
+for i in tqdm(range(len(a_list)//combined_length+1)):
+    content = '\n'.join(a_list[i*combined_length:(i+1)*combined_length])
     if content=='': continue
     get_trans=True
     while get_trans:
@@ -45,7 +47,7 @@ for i in tqdm(range(len(a_list)//100+1)):
             time.sleep(0.1)
         except:
             pass
-    if success%100==0:
+    if success%10==0:
         print(success)
         print(a_trans_list[-10:])
     time.sleep(0.1)
